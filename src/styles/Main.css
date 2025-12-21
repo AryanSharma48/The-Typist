@@ -34,6 +34,7 @@ main{
 #text-input::placeholder{
     padding: 3px;
     font-size: 1.3rem;
+    color: rgb(154, 154, 154);
     
 }
 
@@ -81,12 +82,13 @@ main{
     border: none;
     background-color: transparent;
     color: #444444;
+    transition: 0.3s ease-in-out;
 }
 
 #restart-button button:hover{
     color: white;
     cursor: pointer;
     /* transform: scale(1.1); */
-    transition: 0.3s ease;
+    
     border: none;
 }
