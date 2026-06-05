@@ -8,6 +8,7 @@ const ClickSpark = ({
   duration = 400,
   easing = 'ease-out',
   extraScale = 1.0,
+  style = {},
   children
 }) => {
   const canvasRef = useRef(null);
@@ -133,7 +134,8 @@ const ClickSpark = ({
       style={{
         position: 'relative',
         width: '100%',
-        height: '100%'
+        height: '100%',
+        ...style
       }}
       onClick={handleClick}>
       <canvas
