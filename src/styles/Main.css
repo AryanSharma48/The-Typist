@@ -150,18 +150,20 @@ main {
 }
 
 
-.mario-cursor {
+.poke-cursor {
     position: absolute;
-    width: 3px;
+    width: 4px;
     height: 1.4em;
-    background: var(--black);
-    animation: marioBlink 0.8s steps(2) infinite;
+    background: #ff4040;
+    box-shadow: 0 0 8px #ff4040, 0 0 15px #ffffff;
+    animation: pokeBlink 0.8s steps(2) infinite;
     z-index: 100;
-    transition: left 0.1s ease-out, top 0.1s ease-out;
+    transition: left 0.08s ease-out, top 0.08s ease-out;
     pointer-events: none;
+    border-radius: 2px;
 }
 
-@keyframes marioBlink {
+@keyframes pokeBlink {
 
     0%,
     49% {

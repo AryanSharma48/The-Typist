@@ -339,7 +339,7 @@ export default function Main() {
               ref={(el) => {
                 if (el && typed.length > 0) {
                   const currentSpan = el.querySelector(".current");
-                  const cursor = el.querySelector(".mario-cursor");
+                  const cursor = el.querySelector(".poke-cursor");
                   if (currentSpan) {
                     // Responsive Scrolling Logic
                     const styles = window.getComputedStyle(el);
@@ -366,7 +366,7 @@ export default function Main() {
                   }
                 } else if (el) {
                   el.style.transform = `translateY(0)`;
-                  const cursor = el.querySelector(".mario-cursor");
+                  const cursor = el.querySelector(".poke-cursor");
                   const firstSpan = el.querySelector("span");
                   if (cursor && firstSpan) {
                     cursor.style.left = `${firstSpan.offsetLeft}px`;
@@ -376,7 +376,7 @@ export default function Main() {
               }}
             >
               {/* The Floating Cursor */}
-              <div className="mario-cursor"></div>
+              <div className="poke-cursor"></div>
 
               {targetText.split("").map((char, i) => {
                 const typedChar = typed[i];
