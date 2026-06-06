@@ -7,6 +7,17 @@ const sentences = [
   "Purpose is not something you find suddenly, but something you build through action. Waiting for clarity before starting often leads to permanent hesitation. Direction emerges when effort is applied repeatedly in one general path. Most people do not fail because they choose the wrong goal, but because they stop too early. Consistency creates identity, and identity reinforces behavior. When you act like the person you want to become, transformation becomes inevitable. Discipline shapes days, and days shape years. The quality of your focus determines the quality of your output. Meaning is created when effort is aligned with values rather than approval. External validation is unstable, but internal standards endure. The ability to work without immediate reward builds strength that lasts. Success is quieter than imagined, often felt before it is seen. Momentum grows when action becomes habitual rather than emotional. The strongest habits are built during ordinary days, not extraordinary ones. Direction becomes clearer when you commit instead of constantly reconsidering. Progress requires choosing long term fulfillment over short term comfort. Most limitations exist only because they have not been tested yet. Courage grows through exposure, not contemplation. Confidence is earned through repetition, not affirmation. Every small decision compounds into a larger trajectory. When effort is honest, results eventually follow. Purpose deepens as skill increases. The journey becomes meaningful when growth is prioritized over speed. Even slow progress moves you forward. What matters most is not how fast you move, but that you keep moving at all."
 ];
 
+const pokemonSentences = [
+  "Pikachu, the Mouse Pokemon. It can cast electricity from its cheeks, creating powerful sparks when it feels threatened and during battles.",
+  "Charizard, the Flame Pokemon. It spits fire that is hot enough to melt boulders. It may cause forest fires by blowing flames unintentionally.",
+  "Mewtwo, the Genetic Pokemon. It was created by a scientist after years of horrific gene splicing and DNA engineering experiments.",
+  "To defeat a Pokemon, you must weaken it first. Throwing a Pokeball at a healthy Pokemon will almost always fail and waste your items.",
+  "I wanna be the very best, like no one ever was. To catch them is my real test, to train them is my cause.",
+  "A wild Pokemon appears! Choose your attacks carefully and manage your speed to secure a victory and earn badges.",
+  "Snorlax, the Sleeping Pokemon. It is not satisfied unless it eats four hundred pounds of food every day. Once it is full, it goes to sleep.",
+  "Bulbasaur, the Seed Pokemon. A strange seed was planted on its back at birth. The plant sprouts and grows larger along with this Pokemon."
+];
+
 export default function Main() {
   const [targetText, setTargetText] = useState("");
   const [typed, setTyped] = useState("");
@@ -18,6 +29,7 @@ export default function Main() {
   const [finalStats, setFinalStats] = useState(null);
   const [wpmHistory, setWpmHistory] = useState([]);
   const [timerSettings, setTimerSettings] = useState(10000);
+  const [textMode, setTextMode] = useState("pokemon");
 
   const timerRef = useRef(null);
   const timeoutRef = useRef(null);
@@ -96,13 +108,19 @@ export default function Main() {
     handleRestart();
   }
 
-  function generateText() {
-    const randomIndex = Math.floor(Math.random() * sentences.length);
-    return sentences[randomIndex];
+  function handleModeChange(newMode) {
+    setTextMode(newMode);
+    loadText(newMode);
   }
 
-  function loadText() {
-    const text = generateText();
+  function generateText(mode = textMode) {
+    const currentSentences = mode === "pokemon" ? pokemonSentences : sentences;
+    const randomIndex = Math.floor(Math.random() * currentSentences.length);
+    return currentSentences[randomIndex];
+  }
+
+  function loadText(mode = textMode) {
+    const text = generateText(mode);
     setTargetText(text.toLowerCase());
     setTyped("");
     typedRef.current = "";
@@ -274,26 +292,44 @@ export default function Main() {
             : Math.round(timerSettings / 1000)}
         </div>
 
-        <div className="time-settings">
-          <span>Time(s):</span>
-          <button
-            onClick={() => timeSettings(10)}
-            className={timerSettings === 10000 ? "active" : ""}
-          >
-            10
-          </button>
-          <button
-            onClick={() => timeSettings(30)}
-            className={timerSettings === 30000 ? "active" : ""}
-          >
-            30
-          </button>
-          <button
-            onClick={() => timeSettings(60)}
-            className={timerSettings === 60000 ? "active" : ""}
-          >
-            60
-          </button>
+        <div className="settings-container">
+          <div className="time-settings">
+            <span>Time(s):</span>
+            <button
+              onClick={() => timeSettings(10)}
+              className={timerSettings === 10000 ? "active" : ""}
+            >
+              10
+            </button>
+            <button
+              onClick={() => timeSettings(30)}
+              className={timerSettings === 30000 ? "active" : ""}
+            >
+              30
+            </button>
+            <button
+              onClick={() => timeSettings(60)}
+              className={timerSettings === 60000 ? "active" : ""}
+            >
+              60
+            </button>
+          </div>
+
+          <div className="mode-settings">
+            <span>Mode:</span>
+            <button
+              onClick={() => handleModeChange("pokemon")}
+              className={textMode === "pokemon" ? "active" : ""}
+            >
+              Poke
+            </button>
+            <button
+              onClick={() => handleModeChange("standard")}
+              className={textMode === "standard" ? "active" : ""}
+            >
+              Standard
+            </button>
+          </div>
         </div>
 
         <div id="typing-sentence">
