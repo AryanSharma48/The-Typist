@@ -18,6 +18,42 @@ const pokemonSentences = [
   "Bulbasaur, the Seed Pokemon. A strange seed was planted on its back at birth. The plant sprouts and grows larger along with this Pokemon."
 ];
 
+const getTrainerRank = (wpm) => {
+  if (wpm >= 80) {
+    return {
+      title: "POKÉMON MASTER",
+      ball: "Master Ball Badge",
+      color: "#a040a0",
+      emoji: "🔮",
+      bgClass: "rank-master"
+    };
+  } else if (wpm >= 50) {
+    return {
+      title: "ELITE FOUR",
+      ball: "Ultra Ball Badge",
+      color: "#e0a000",
+      emoji: "💛",
+      bgClass: "rank-elite"
+    };
+  } else if (wpm >= 30) {
+    return {
+      title: "GYM LEADER",
+      ball: "Great Ball Badge",
+      color: "#0080ff",
+      emoji: "💙",
+      bgClass: "rank-leader"
+    };
+  } else {
+    return {
+      title: "POKÉDEX NOVICE",
+      ball: "Poké Ball Badge",
+      color: "#ff4040",
+      emoji: "❤️",
+      bgClass: "rank-novice"
+    };
+  }
+};
+
 export default function Main() {
   const [targetText, setTargetText] = useState("");
   const [typed, setTyped] = useState("");
@@ -71,37 +107,20 @@ export default function Main() {
     }
   }, [typed, targetText]);
 
-  // Handle Tab + Enter for restart
+  // Handle shortcuts for restart: Escape or Tab
   useEffect(() => {
-    const handleGlobalKeyDown = (e) => {
-      // Check for Tab + Enter
-      if (e.key === 'Enter' && e.shiftKey === false && e.ctrlKey === false) {
-      }
-    };
-    
-
-    let tabDown = false;
-    const keyDown = (e) => {
-      if (e.key === 'Tab') {
-        tabDown = true;
-        e.preventDefault(); // Stop focus jumping
-      }
-      if (e.key === 'Enter' && tabDown) {
+    const handleKeyDown = (e) => {
+      if (e.key === 'Tab' || e.key === 'Escape') {
+        e.preventDefault();
         handleRestart();
-        tabDown = false;
       }
     };
-    const keyUp = (e) => {
-      if (e.key === 'Tab') tabDown = false;
-    };
 
-    window.addEventListener('keydown', keyDown);
-    window.addEventListener('keyup', keyUp);
+    window.addEventListener('keydown', handleKeyDown);
     return () => {
-      window.removeEventListener('keydown', keyDown);
-      window.removeEventListener('keyup', keyUp);
+      window.removeEventListener('keydown', handleKeyDown);
     };
-  }, [targetText]); // Dependency on targetText or empty if handleRestart is stable
+  }, [targetText, textMode]);
 
   function timeSettings(settings) {
     setTimerSettings(settings * 1000);
@@ -404,53 +423,69 @@ export default function Main() {
       </main>
 
       {/* Results Modal - Moved Outside Main to avoid transform issues */}
-      {showResults && finalStats && (
-        <div className="results-page">
-          <div className="results-container">
-            <div className="results-header">
-              <h1>Victory!</h1>
-            </div>
+      {showResults && finalStats && (() => {
+        const rank = getTrainerRank(finalStats.wpm);
+        return (
+          <div className="results-page">
+            <div className="results-container" style={{ borderColor: rank.color, boxShadow: `15px 15px 0 ${rank.color}44` }}>
+              <div className="results-header">
+                <h1>Victory!</h1>
+              </div>
 
-            {/* Main Stats */}
-            <div className="results-main-stats">
-              <div className="main-stat">
-                <div className="main-stat-label">wpm</div>
-                <div className="main-stat-value">{finalStats.wpm}</div>
+              {/* Trainer Rank Badge */}
+              <div className="results-rank-badge">
+                <div 
+                  className="badge-pokeball" 
+                  style={{ background: `linear-gradient(to bottom, ${rank.color} 50%, var(--white) 50%)` }}
+                />
+                <h2 className="rank-title" style={{ color: rank.color }}>
+                  {rank.emoji} {rank.title}
+                </h2>
+                <p className="rank-subtitle">{rank.ball}</p>
               </div>
-              <div className="main-stat">
-                <div className="main-stat-label">accuracy</div>
-                <div className="main-stat-value">{finalStats.accuracy}%</div>
-              </div>
-            </div>
 
-            {/* Detailed Stats */}
-            <div className="results-detailed-stats">
-              <div className="detail-stat">
-                <span className="detail-label">raw wpm</span>
-                <span className="detail-value">{finalStats.rawWpm}</span>
+              {/* Main Stats */}
+              <div className="results-main-stats">
+                <div className="main-stat">
+                  <div className="main-stat-label">wpm</div>
+                  <div className="main-stat-value" style={{ color: rank.color }}>{finalStats.wpm}</div>
+                </div>
+                <div className="main-stat">
+                  <div className="main-stat-label">accuracy</div>
+                  <div className="main-stat-value" style={{ color: rank.color }}>{finalStats.accuracy}%</div>
+                </div>
               </div>
-              <div className="detail-stat">
-                <span className="detail-label">characters</span>
-                <span className="detail-value">{finalStats.totalChars}</span>
-              </div>
-              <div className="detail-stat">
-                <span className="detail-label">time</span>
-                <span className="detail-value">{finalStats.time}s</span>
-              </div>
-            </div>
 
-            {/* Actions */}
-            <div className="results-actions">
-              <button
-                className="results-button primary"
-                onClick={handleRestart}
-              >
-                Next Battle!
-              </button>
+              {/* Detailed Stats */}
+              <div className="results-detailed-stats">
+                <div className="detail-stat">
+                  <span className="detail-label">raw wpm</span>
+                  <span className="detail-value">{finalStats.rawWpm}</span>
+                </div>
+                <div className="detail-stat">
+                  <span className="detail-label">characters</span>
+                  <span className="detail-value">{finalStats.totalChars}</span>
+                </div>
+                <div className="detail-stat">
+                  <span className="detail-label">time</span>
+                  <span className="detail-value">{finalStats.time}s</span>
+                </div>
+              </div>
+
+              {/* Actions */}
+              <div className="results-actions">
+                <button
+                  className="results-button primary"
+                  onClick={handleRestart}
+                  style={{ backgroundColor: rank.color }}
+                >
+                  Next Battle!
+                </button>
+              </div>
             </div>
           </div>
-        </div>
-      )}
+        );
+      })()}
     </>
   );
 }
