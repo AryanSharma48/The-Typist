@@ -1,6 +1,6 @@
-## Description
+# PokeType
 
-this project is a Node.js application. Add a brief description of its purpose and what problem it solves.
+PokeType is a Node.js application. Add a brief description of its purpose and what problem it solves.
 
 ## Installation
 
@@ -17,7 +17,6 @@ You can run the following scripts:
 - `npm run dev`
 - `npm run build`
 - `npm run lint`
-- `npm run preview`
 
 ## Dependencies
 
@@ -62,7 +61,6 @@ Project structure:
 │   │   ├── logo.png
 │   │   ├── pokeball.png
 │   │   ├── pokemons
-│   │   │   └── pikachu.png
 │   │   └── textbox.png
 │   ├── index.css
 │   ├── index.jsx
@@ -84,3 +82,7 @@ Add your license information here.
 ## Built By
 
 Built with ❤️ by @AryanSharma48
+
+## Description
+
+this project is a Node.js application. Add a brief description of its purpose and what problem it solves.
